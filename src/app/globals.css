@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F8F7F4;
+    --foreground: #142C4C;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+  }
+
+  html.lenis, html.lenis-smooth {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  body {
+    color: #142C4C;
+    background-color: #F8F7F4;
+    font-family: var(--font-sans), 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Elegant custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F7F4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D9D6D0;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF7A1A;
+}
+
+/* Glass & elevation effects */
+.glass-pill-navbar {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(11, 31, 56, 0.08), 0 2px 6px -1px rgba(11, 31, 56, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-pill-navbar-scrolled {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 14px 36px -6px rgba(11, 31, 56, 0.12), 0 4px 12px -2px rgba(11, 31, 56, 0.04);
+}
+
+.brand-script-orange {
+  font-family: var(--font-serif), 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  color: #FF7A1A;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.65);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 16px rgba(37, 211, 102, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.animate-whatsapp-pulse {
+  animation: pulse-ring 2.4s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.luxury-card {
+  background: #FFFFFF;
+  border: 1px solid #EBE8E1;
+  box-shadow: 0 4px 20px -2px rgba(21, 43, 70, 0.05);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.luxury-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 36px -4px rgba(21, 43, 70, 0.12);
+  border-color: #D6CFBE;
+}
+
+.luxury-script {
+  font-family: var(--font-serif), 'Playfair Display', Georgia, serif;
+  font-style: italic;
+}
+
+/* Nav Link Hover Underline Indicator */
+.nav-link-indicator {
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.nav-link-indicator::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 20px;
+  height: 2px;
+  background: #152B46;
+  border-radius: 9999px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link-indicator:hover::after,
+.nav-link-indicator.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Shimmer utility */
+.shimmer-effect {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+}
+
+/* Subtle Architectural Dot Grid Pattern */
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(20, 44, 76, 0.08) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+/* Editorial Serif Heading Utility */
+.font-editorial {
+  font-family: var(--font-serif), 'Playfair Display', Georgia, serif;
+}
+
+/* Hide scrollbars while preserving horizontal/vertical scrollability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

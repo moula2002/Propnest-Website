@@ -1,0 +1,40 @@
+import { z } from 'zod';
+
+export const propertyFormSchema = z.object({
+  title: z.string().trim().min(5, 'Title must be at least 5 characters').max(255),
+  description: z.string().trim().min(20, 'Description must be at least 20 characters'),
+  propertyType: z.string().trim().min(2, 'Property category is required').max(50),
+  listingType: z.enum(['SALE', 'RENT', 'LEASE']),
+  price: z.coerce.number().positive('Price must be greater than 0'),
+  negotiable: z.boolean().default(false),
+  bedrooms: z.coerce.number().int().min(0).default(0),
+  bathrooms: z.coerce.number().int().min(0).default(0),
+  balconies: z.coerce.number().int().min(0).default(0),
+  builtUpArea: z.coerce.number().positive().optional().or(z.literal(0)),
+  carpetArea: z.coerce.number().positive('Carpet area is required and must be positive'),
+  plotArea: z.coerce.number().positive().optional().or(z.literal(0)),
+  areaUnit: z.string().default('sqft'),
+  floorNumber: z.coerce.number().int().optional().or(z.literal(0)),
+  totalFloors: z.coerce.number().int().optional().or(z.literal(0)),
+  furnishingStatus: z.enum(['UNFURNISHED', 'SEMI_FURNISHED', 'FULLY_FURNISHED']).default('UNFURNISHED'),
+  possessionStatus: z.enum(['READY_TO_MOVE', 'UNDER_CONSTRUCTION']).default('READY_TO_MOVE'),
+  constructionStatus: z.string().max(50).optional().or(z.literal('')),
+  propertyAge: z.string().max(50).optional().or(z.literal('')),
+  facing: z.string().max(50).optional().or(z.literal('')),
+  parkingSpaces: z.coerce.number().int().min(0).default(0),
+  city: z.string().trim().min(2, 'City is required').max(100),
+  locality: z.string().trim().min(2, 'Locality is required').max(100),
+  state: z.string().trim().min(2, 'State is required').max(100),
+  country: z.string().trim().default('India'),
+  postalCode: z.string().trim().min(4, 'Pincode is required').max(20),
+  latitude: z.coerce.number().min(-90).max(90).optional(),
+  longitude: z.coerce.number().min(-180).max(180).optional(),
+  address: z.string().trim().min(5, 'Address is required (at least 5 characters)'),
+  landmark: z.string().trim().max(255).optional().or(z.literal('')),
+  amenityIds: z.array(z.string()).optional(),
+  isFeatured: z.boolean().default(false),
+  isLatest: z.boolean().default(false),
+});
+
+export type PropertyFormData = z.infer<typeof propertyFormSchema>;
+
