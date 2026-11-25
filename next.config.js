@@ -13,6 +13,21 @@ const nextConfig = {
       },
       {
         protocol: 'http',
+        hostname: 'propnest-server.onrender.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.onrender.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '*.onrender.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
         hostname: 'localhost',
         port: '5000',
         pathname: '/**',

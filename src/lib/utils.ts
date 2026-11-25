@@ -55,6 +55,11 @@ export function getFullImageUrl(url: string | null | undefined): string {
 
   const backendBase = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://propnest-server.onrender.com';
 
+  // Upgrade non-localhost http:// (e.g. Render backend) to https://
+  if (url.startsWith('http://') && !url.includes('localhost')) {
+    url = url.replace('http://', 'https://');
+  }
+
   // If local uploads on backend
   if (url.startsWith('uploads/') || url.startsWith('/uploads/')) {
     return `${backendBase}${url.startsWith('/') ? '' : '/'}${url}`;
