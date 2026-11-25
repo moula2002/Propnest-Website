@@ -14,6 +14,7 @@ interface PropertyGalleryProps {
 export const PropertyGallery: React.FC<PropertyGalleryProps> = ({ images, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   const displayImages =
     images && images.length > 0
@@ -27,6 +28,10 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({ images, title 
         ];
 
   const currentImage = displayImages[currentIndex];
+  const currentKey = currentImage.id || currentImage.imageUrl || `${currentIndex}`;
+  const currentSrc = imgErrors[currentKey]
+    ? '/images/properties/property-gallery-fallback.jpg'
+    : getFullImageUrl(currentImage.imageUrl);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1));
@@ -41,12 +46,16 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({ images, title 
       {/* Main Image Display */}
       <div className="relative w-full h-[320px] sm:h-[450px] md:h-[500px] rounded-2xl overflow-hidden bg-slate-900 group">
         <Image
-          src={getFullImageUrl(currentImage.imageUrl)}
+          src={currentSrc}
           alt={currentImage.altText || `${title} - Image ${currentIndex + 1}`}
           fill
           priority
+          unoptimized
           className="object-cover"
           sizes="(max-width: 1200px) 100vw, 900px"
+          onError={() => {
+            setImgErrors((prev) => ({ ...prev, [currentKey]: true }));
+          }}
         />
 
         {/* Counter Pill */}
@@ -96,11 +105,22 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({ images, title 
               }`}
             >
               <Image
-                src={getFullImageUrl(img.thumbnailUrl || img.imageUrl)}
+                src={
+                  imgErrors[img.id || img.imageUrl || `${index}`]
+                    ? '/images/properties/property-gallery-fallback.jpg'
+                    : getFullImageUrl(img.thumbnailUrl || img.imageUrl)
+                }
                 alt={`Thumbnail ${index + 1}`}
                 fill
+                unoptimized
                 className="object-cover"
                 sizes="100px"
+                onError={() => {
+                  setImgErrors((prev) => ({
+                    ...prev,
+                    [img.id || img.imageUrl || `${index}`]: true,
+                  }));
+                }}
               />
             </button>
           ))}
@@ -126,9 +146,10 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({ images, title 
           <div className="relative flex-1 flex items-center justify-center p-4">
             <div className="relative w-full h-full max-w-5xl max-h-[85vh]">
               <Image
-                src={getFullImageUrl(currentImage.imageUrl)}
+                src={currentSrc}
                 alt={currentImage.altText || title}
                 fill
+                unoptimized
                 className="object-contain"
                 sizes="100vw"
               />
