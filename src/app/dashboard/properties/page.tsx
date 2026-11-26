@@ -172,6 +172,7 @@ export default function MyPropertiesPage() {
                               src={getFullImageUrl(mainImage)}
                               alt={prop.title}
                               fill
+                              unoptimized
                               className="object-cover"
                             />
                           </div>
