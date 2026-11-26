@@ -18,8 +18,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const [categories, setCategories] = useState<PropertyCategory[]>(initialCategories);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Refresh live admin-managed categories from backend API
+  // Refresh live admin-managed categories from backend API only if not supplied by SSR
   useEffect(() => {
+    if (initialCategories && initialCategories.length > 0) {
+      return;
+    }
+
     let cancelled = false;
 
     const fetchCategories = async () => {

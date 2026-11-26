@@ -8,7 +8,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: 60000, // 60s timeout to gracefully accommodate Render cold starts
 });
 
 // Request interceptor: attach bearer token from localStorage (if present)
@@ -46,10 +46,29 @@ const processQueue = (error: Error | null) => {
   failedQueue = [];
 };
 
-apiClient.interceptors.response.use(
+  apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+      _retryCount?: number;
+    };
+
+    // Auto-retry GET requests on cold start timeout or network/gateway errors (502, 503, 504)
+    const isGet = originalRequest?.method?.toLowerCase() === 'get';
+    const isTimeoutOrGatewayError =
+      error.code === 'ECONNABORTED' ||
+      !error.response ||
+      [502, 503, 504].includes(error.response?.status);
+
+    if (originalRequest && isGet && isTimeoutOrGatewayError) {
+      originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
+      if (originalRequest._retryCount <= 2) {
+        // Exponential backoff delay (1s, 2s)
+        await new Promise((res) => setTimeout(res, 1000 * originalRequest._retryCount!));
+        return apiClient(originalRequest);
+      }
+    }
 
     // Don't intercept auth login/register/refresh endpoints to avoid loops
     if (
